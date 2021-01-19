@@ -5,6 +5,8 @@ const vaciarCarritoBtn = document.querySelector("#vaciar-carrito");
 const listaCursos = document.querySelector("#lista-cursos");
 let articulosCarrito = [];
 
+const fragment = new DocumentFragment();
+
 cargarEventListeners();
 function cargarEventListeners() {
     // Cuando agregas un curso presionando "Agregar al carrito";
@@ -12,6 +14,13 @@ function cargarEventListeners() {
 
     // Elimina cursos del carrito
     carrito.addEventListener("click", eliminarCurso);
+
+    // Muestra los cursos en el carrito en el Storage
+    document.addEventListener("DOMContentLoaded", () => {
+        articulosCarrito = JSON.parse( localStorage.getItem('carrito') ) || [];
+
+        carritoHTML();
+    });
 
     // Vaciar el carrito 
     vaciarCarritoBtn.addEventListener("click", () => {
@@ -102,9 +111,18 @@ function carritoHTML() {
             </td>
         `;
 
-        // Agrega el HTML del carrito al tbody
-        contenedorCarrito.appendChild(row);
+        // Se agrega al DocumentFragment para agregarlo al HTML
+        fragment.appendChild(row);
     });
+    // Agrega el HTML del carrito al tbody
+    contenedorCarrito.appendChild(fragment);
+
+    // Agregar el carrito de compras al localStorage
+    sincronizarStorage();
+}
+
+function sincronizarStorage() {
+    localStorage.setItem('carrito', JSON.stringify(articulosCarrito));
 }
 
 // Elimina los cursos del tbody
