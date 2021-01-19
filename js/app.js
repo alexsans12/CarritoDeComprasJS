@@ -26,6 +26,8 @@ function cargarEventListeners() {
     vaciarCarritoBtn.addEventListener("click", () => {
         articulosCarrito = [];
 
+        localStorage.removeItem('carrito');
+
         limpiarHTML();
     });
 }
